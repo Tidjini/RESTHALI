@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Platform,
   StyleSheet,
@@ -14,23 +14,28 @@ import {
   Animated,
   Image,
   Dimensions
-} from 'react-native';
-import MapView from 'react-native-maps';
-import LinearGradient from 'react-native-linear-gradient';
-import { Rating } from 'react-native-ratings';
-import { Button } from '../components/common';
+} from "react-native";
+import MapView from "react-native-maps";
+import { connect } from "react-redux";
+import { enterToDetails } from "../actions";
+import LinearGradient from "react-native-linear-gradient";
+import Icon from "react-native-vector-icons/EvilIcons";
+import { Rating } from "react-native-ratings";
 
-import state from '../../Model/data';
+import { Button } from "../components/common";
+import state from "../../Model/data";
+import RestaurantCard from "../components/restaurantCard";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
+const mapStyle = require("../../assets/map.style.json");
 
 const CARD_HEIGHT = height / 2.4;
 const CARD_WIDTH = CARD_HEIGHT + 50;
 
-const image = require('../../assets/images/rest_01.jpg');
-const colors = require('../../assets/colors');
+const image = require("../../assets/images/rest_02.jpg");
+const colors = require("../../assets/colors");
 
-export default class App extends Component {
+class Main extends Component {
   componentWillMount() {
     this.index = 0;
     this.animation = new Animated.Value(0);
@@ -75,12 +80,12 @@ export default class App extends Component {
       const scale = this.animation.interpolate({
         inputRange,
         outputRange: [1, 2.5, 1],
-        extrapolate: 'clamp'
+        extrapolate: "clamp"
       });
       const opacity = this.animation.interpolate({
         inputRange,
         outputRange: [0.35, 1, 0.35],
-        extrapolate: 'clamp'
+        extrapolate: "clamp"
       });
       return { scale, opacity };
     });
@@ -152,6 +157,10 @@ export default class App extends Component {
       </Animated.ScrollView>
     );
   }
+
+  onOrderRestaurant() {
+    this.props.enterToDetails();
+  }
   render() {
     const { container } = styles;
     // NOTE: map => (this.map = map) is ref so we can animate the map later (when region changes)
@@ -161,120 +170,33 @@ export default class App extends Component {
           ref={map => (this.map = map)}
           initialRegion={state.region}
           style={container}
+          customMapStyle={mapStyle}
         >
           {this.renderMarkers()}
         </MapView>
         <View
           style={{
-            position: 'absolute',
-            bottom: 10,
-            left: 0,
-            right: 0,
-            paddingVertical: 10,
-            width,
-            height: CARD_HEIGHT + 100,
-            borderRadius: 10,
-            alignItems: 'center',
-            justifyContent: 'center'
+            height: 50,
+            width: width - 50,
+            alignSelf: "center",
+            position: "absolute",
+            top: 20,
+            borderRadius: 5,
+            backgroundColor: "#FFF",
+            shadowColor: colors.primary,
+            shadowOffset: { width: 2, height: 2 },
+            shadowOpacity: 1,
+            elevation: 2,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center"
           }}
         >
-          <View style={{ width, height: CARD_HEIGHT }}>
-            <View
-              style={{
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-                borderRadius: 10,
-                backgroundColor: '#FFF',
-                alignSelf: 'center'
-              }}
-            >
-              <Image
-                source={image}
-                style={{
-                  height: 180,
-                  width: CARD_WIDTH,
-                  borderTopLeftRadius: 10,
-                  borderTopRightRadius: 10,
-                  resizeMode: 'cover'
-                }}
-              />
-              <LinearGradient
-                colors={['#FFFFFF00', '#FFFFFF', '#FFFFFF']}
-                style={{
-                  height: 120,
-                  width: CARD_WIDTH,
-                  position: 'absolute',
-                  bottom: CARD_HEIGHT - 180,
-                  alignItems: 'center'
-                }}
-              />
-              <Text
-                style={{
-                  color: '#59EA8C',
-
-                  position: 'absolute',
-                  alignItems: 'center',
-                  margin: 16,
-                  paddingHorizontal: 7,
-                  paddingVertical: 2,
-                  backgroundColor: '#FFFFFF',
-                  borderWidth: 1,
-                  borderRadius: 5,
-                  borderColor: '#0AC272',
-                  fontSize: 9
-                }}
-              >
-                OPEN
-              </Text>
-              <View
-                style={{
-                  width: CARD_WIDTH,
-                  position: 'absolute',
-                  bottom: CARD_HEIGHT - 230,
-                  alignItems: 'center'
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: colors.jet,
-                    fontWeight: 'bold'
-                  }}
-                >
-                  Rotana Restaurant
-                </Text>
-                <Text>Oran, Algerie</Text>
-                <Rating
-                  ratingCount={5}
-                  imageSize={18}
-                  onFinishRating={this.ratingCompleted}
-                  style={{ paddingVertical: 12 }}
-                />
-                <Text>460, Reviews</Text>
-              </View>
-            </View>
-            <View
-              style={{
-                width: CARD_WIDTH,
-                height: 50,
-                flexDirection: 'row',
-                position: 'absolute',
-                bottom: -10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                alignSelf: 'center'
-              }}
-            >
-              <Button
-                buttonWidth={CARD_WIDTH - 100}
-                buttonHeight={50}
-                paddingTop={12}
-              >
-                ORDER NOW
-              </Button>
-            </View>
-          </View>
+          <Icon name="navicon" size={24} style={{ marginLeft: 10 }} />
+          <Text style={{ color: colors.dimGray }}>Search for restaurant</Text>
+          <Icon name="search" size={24} style={{ marginRight: 10 }} />
         </View>
+        <RestaurantCard onPressItem={this.onOrderRestaurant.bind(this)} />
       </View>
     );
   }
@@ -285,26 +207,26 @@ const styles = StyleSheet.create({
     flex: 1
   },
   markerWrap: {
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center"
   },
   marker: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'rgba(130,4,150, 0.9)'
+    backgroundColor: "rgba(130,4,150, 0.9)"
   },
   ring: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: 'rgba(130,4,150, 0.3)',
-    position: 'absolute',
+    backgroundColor: "rgba(130,4,150, 0.3)",
+    position: "absolute",
     borderWidth: 1,
-    borderColor: 'rgba(130,4,150, 0.5)'
+    borderColor: "rgba(130,4,150, 0.5)"
   },
   scrollView: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 30,
     left: 0,
     right: 0,
@@ -317,21 +239,21 @@ const styles = StyleSheet.create({
   card: {
     padding: 10,
     elevation: 2,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     marginHorizontal: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
     height: CARD_HEIGHT,
     width: CARD_WIDTH,
-    overflow: 'hidden'
+    overflow: "hidden"
   },
   cardImage: {
     flex: 3,
-    width: '100%',
-    height: '100%',
-    alignSelf: 'center'
+    width: "100%",
+    height: "100%",
+    alignSelf: "center"
   },
   textContent: {
     flex: 1
@@ -339,10 +261,12 @@ const styles = StyleSheet.create({
   cardtitle: {
     fontSize: 12,
     marginTop: 5,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   cardDescription: {
     fontSize: 12,
-    color: '#444'
+    color: "#444"
   }
 });
+
+export default connect(null, { enterToDetails })(Main);

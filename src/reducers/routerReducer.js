@@ -1,7 +1,8 @@
-import { ENTER_TO_MAIN } from '../actions/types';
+import { ENTER_TO_MAIN, ENTER_TO_DETAILS } from "../actions/types";
 
 const INITIAL_STATE = {
-  start: ''
+  start: "",
+  details: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -9,7 +10,9 @@ export default (state = INITIAL_STATE, action) => {
 
   switch (action.type) {
     case ENTER_TO_MAIN:
-      return { ...state, start: 'start' };
+      return { ...state, start: "start" };
+    case ENTER_TO_DETAILS:
+      return { ...state, details: "details" };
     default:
       return state;
   }
