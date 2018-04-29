@@ -37,13 +37,13 @@ class Start extends Component {
         <LinearGradient
           colors={["#FFFFFF00", "#FFFFFFDD", "#FFFFFF"]}
           style={{
-            height: SCREEN_HEIGHT / 2.1,
+            height: SCREEN_HEIGHT / 2,
             width: SCREEN_WIDTH,
             position: "absolute"
           }}
         >
           <View style={{ marginTop: 100, marginLeft: 50 }}>
-            <Text style={{ fontSize: 36, color: colors.jet }}>
+            <Text style={{ fontSize: 28, color: colors.jet, paddingLeft: 10 }}>
               RESTAURENTS {"\n"}NEAR ME
             </Text>
             <Button

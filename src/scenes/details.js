@@ -65,9 +65,7 @@ export default class Details extends Component {
             alignItems: "center",
             paddingLeft: 30,
             height: 70,
-            backgroundColor: "#fff",
-            borderColor: "#00000030",
-            borderBottomWidth: 0.4
+            backgroundColor: "#fff"
           }}
         >
           <Text style={{ flex: 1, fontSize: 16, fontWeight: "bold" }}>
@@ -85,14 +83,19 @@ export default class Details extends Component {
         </View>
         <View
           style={{
+            width,
+            backgroundColor: "#00000020",
+            height: 0.4
+          }}
+        />
+        <View
+          style={{
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
             paddingLeft: 30,
             height: 70,
-            backgroundColor: "#fff",
-            borderColor: "#00000080",
-            borderBottomWidth: 0.4
+            backgroundColor: "#fff"
           }}
         >
           <Text style={{ flex: 1, fontSize: 16, fontWeight: "bold" }}>
@@ -110,14 +113,19 @@ export default class Details extends Component {
         </View>
         <View
           style={{
+            width,
+            backgroundColor: "#00000020",
+            height: 0.4
+          }}
+        />
+        <View
+          style={{
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
             paddingLeft: 30,
             height: 70,
-            backgroundColor: "#fff",
-            borderColor: "#00000080",
-            borderBottomWidth: 0.4
+            backgroundColor: "#fff"
           }}
         >
           <Text style={{ flex: 1, fontSize: 16, fontWeight: "bold" }}>
@@ -133,6 +141,13 @@ export default class Details extends Component {
             countColor={colors.jet}
           />
         </View>
+        <View
+          style={{
+            width,
+            backgroundColor: "#00000020",
+            height: 0.4
+          }}
+        />
         <View style={buttonContainer}>
           <Button
             buttonWidth={CARD_WIDTH - 100}
